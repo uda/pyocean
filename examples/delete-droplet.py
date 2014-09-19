@@ -7,7 +7,7 @@ sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import pyocean
 
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', '')
-DROPLET_ID = '2655785'
+DROPLET_ID = '12345'
 
 try:
     digitalocean = pyocean.DigitalOcean(ACCESS_TOKEN)

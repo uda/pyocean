@@ -5,7 +5,7 @@
 Create new droplet and list all droplets.
 """
 
-import pyocean
+from os.path import dirname, abspath
 import os
 import sys
 
@@ -21,11 +21,11 @@ try:
         'name': 'test-droplet-1',
         'region': 'nyc2',
         'size': '512mb',
-        'image': 'ubuntu1204'
+        'image': 'fedora-19-x32'
     }
     droplet = digitalocean.droplet.create(attrs)
     for droplet in digitalocean.droplet.all():
-        print(droplet.name)
+        print(droplet)
 except pyocean.exceptions.DOException as e:
-    print('ERROR: %s' % e)
+    print('ERROR %s: %s' % (e.code, e.message))
 
