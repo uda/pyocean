@@ -12,6 +12,7 @@ import sys
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import pyocean
 
+# Put your DigitalOcean access token here or set from environment variables
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', '')
 
 try:
