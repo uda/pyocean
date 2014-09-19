@@ -46,9 +46,9 @@ class ApiClient(object):
                 content = {}
             status_code = int(r.status_code)
             if status_code >= 500:
-                raise ServerException(content.get('message'))
+                raise ServerError(status_code, content.get('message'))
             elif status_code >= 400:
-                raise ClientException(content.get('message'))
+                raise ClientError(status_code, content.get('message'))
             return content
 
 
@@ -75,12 +75,23 @@ class Resource(ApiClient):
         attr = data[self.__resource[:-1]]
         return getattr(pyocean, self.__classname)(attr)
 
+    def get(self, resource_id):
+        data = self.call_api('%s/%s' % (self.__resource, str(resource_id)))
+        attr = data[self.__resource[:-1]]
+        return getattr(pyocean, self.__classname)(attr)
+
     def destroy(self):
         if self.__attrs.get('id'):
             path = '%s/%s' % (self.__resource, self.__attrs['id'])
             data = self.call_api(path, method='delete')
         else:
             raise ValueError('Droplet is not loaded.')
+
+    def __str__(self):
+        if self.__classname is 'Droplet':
+            return '<Droplet %s (%s)>' % (self.name, self.image['name'])
+        else:
+            return '<Object>'
 
 
 class ResourceIterator(ApiClient):

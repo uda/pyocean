@@ -1,22 +1,24 @@
-class PyoceanException(Exception):
+class DOException(Exception):
 
-    def __init__(self, msg):
-        super(PyoceanException, self).__init__(msg)
-
-
-class AuthException(PyoceanException):
-
-    def __init__(self, msg="Authentication failed."):
-        super(AuthException, self).__init__(msg)
+    def __init__(self, code=None, msg=None):
+        super(DOException, self).__init__(msg)
+        self.code = code
+        self.message = msg
 
 
-class ClientException(PyoceanException):
+class AuthException(DOException):
 
-    def __init__(self, msg="HTTP error"):
-        super(ClientException, self).__init__(msg)
+    def __init__(self, code=None, msg=None):
+        super(AuthException, self).__init__(code, msg)
 
 
-class ServerException(PyoceanException):
+class ClientError(DOException):
 
-    def __init__(self, msg="HTTP error"):
-        super(ServerException, self).__init__(msg)
+    def __init__(self, code=None, msg=None):
+        super(ClientError, self).__init__(code, msg)
+
+
+class ServerError(DOException):
+
+    def __init__(self, code=None, msg=None):
+        super(ServerError, self).__init__(code, msg)
