@@ -1,3 +1,4 @@
+import pyocean
 import os
 
 class DigitalOcean(object):
@@ -7,10 +8,8 @@ class DigitalOcean(object):
         os.environ['PYOCEAN_ACCESS_TOKEN'] = access_token
 
     def __getattr__(self, attr):
-        if attr in ['droplet', 'action']:
-            module = __import__('pyocean')
-            class_ = getattr(module, attr.capitalize())
-            return class_()
+        if attr in ['droplet', 'action', 'size', 'region']:
+            return getattr(pyocean, attr.capitalize())()
         else:
             me = self.__class__.__name__
             raise AttributeError("'%s' object has no attribute '%s'" % (me, attr))

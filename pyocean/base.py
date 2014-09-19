@@ -90,6 +90,12 @@ class Resource(ApiClient):
     def __str__(self):
         if self.__classname is 'Droplet':
             return '<Droplet %s (%s)>' % (self.name, self.image['name'])
+        elif self.__classname is 'Size':
+            return '<Size %s>' % self.slug
+        elif self.__classname is 'Region':
+            return '<Region %s (%s)>' % (self.slug, self.name)
+        elif self.__classname is 'Action':
+            return '<Action %s (%s)>' % (self.id, self.status)
         else:
             return '<Object>'
 
