@@ -46,9 +46,9 @@ class ApiClient(object):
                 content = {}
             status_code = int(r.status_code)
             if status_code >= 500:
-                raise ServerError(status_code, content.get('message'))
+                raise ServerError(content.get('message'), status_code)
             elif status_code >= 400:
-                raise ClientError(status_code, content.get('message'))
+                raise ClientError(content.get('message'), status_code)
             return content
 
 

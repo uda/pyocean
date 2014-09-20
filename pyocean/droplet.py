@@ -1,11 +1,9 @@
 from .base import Resource, ResourceIterator
-from .dropletaction import DropletAction
 from .exceptions import *
+import time
 
 
 class Droplet(Resource):
-
-    __last_action_id = None
 
     def __init__(self, attrs={}):
         super(Droplet, self).__init__(attrs)
@@ -34,6 +32,21 @@ class Droplet(Resource):
         """Password reset current droplet. New password will be emailed to you."""
         return self.__do_action(type_='password_reset')
 
+    def resize(self, size):
+        pass
+
+    def restore(self, image):
+        pass
+
+    def rebuild(self, image):
+        pass
+
+    def rename(self, name):
+        pass
+
+    def change_kernel(self):
+        pass
+
     def enable_ipv6(self):
         """Enable IPv6 for current droplet."""
         return self.__do_action(type_='enable_ipv6')
@@ -46,7 +59,7 @@ class Droplet(Resource):
         """Enable private networking for current droplet."""
         return self.__do_action(type_='enable_private_networking')
 
-    def create_snapshot(self, name):
+    def snapshot(self, name):
         """Snapshot current droplet."""
         return self.__do_action(type_="snapshot", name=name)
 
@@ -54,13 +67,18 @@ class Droplet(Resource):
         """Perform action on droplet."""
         if not self.id:
             raise ValueError('Droplet not loaded.')
+        path = "droplets/%s/actions" % self.id
         params = {'type': type_}
         if name:
             params['name'] = name
-        data = self.call_api('droplets/%s/actions' % self.id, method='post', params=params)
+        res = self.call_api(path, method='post', params=params)
         try:
-            self.__last_action_id = data['action']['id']
-            return DropletAction(self.id, data['action'])
+            while res['action']['status'] == 'in-progress':
+                time.sleep(1)
+                res = self.call_api('%s/%s' % (path, res['action']['id']))
+                if res['action']['status'] == 'errored':
+                    raise DropletActionError("Action '%s' on dropled failed." % \
+                                             res['action']['type'])
         except KeyError:
             raise InvalidResponse('Retrieved invalid response from DigitalOcean API.')
 

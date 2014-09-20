@@ -5,16 +5,12 @@
 Destroy a droplet.
 """
 
-from os.path import dirname, abspath
-import os
-import sys
-
-sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import pyocean
+import os
 
 # Put your DigitalOcean access token here or set from environment variables
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', '')
-DROPLET_ID = '12345'
+ACCESS_TOKEN = '' or os.getenv('ACCESS_TOKEN', '')
+DROPLET_ID = '12345' 
 
 digitalocean = pyocean.DigitalOcean(ACCESS_TOKEN)
 droplet = digitalocean.droplet.get(DROPLET_ID)

@@ -1,30 +1,23 @@
 class DOException(Exception):
+    """Base exception for pyocean package."""
 
-    def __init__(self, code=None, msg=None):
+    def __init__(self, msg=None, code=None):
         super(DOException, self).__init__(msg)
-        self.code = code
         self.message = msg
-
-
-class AuthException(DOException):
-
-    def __init__(self, msg=None):
-        super(AuthException, self).__init__(msg=msg)
+        self.code = code
 
 
 class ClientError(DOException):
-
-    def __init__(self, code=None, msg=None):
-        super(ClientError, self).__init__(code, msg)
-
+    """HTTP 4xx error"""
 
 class ServerError(DOException):
+    """HTTP 5xx error"""
 
-    def __init__(self, code=None, msg=None):
-        super(ServerError, self).__init__(code, msg)
-
+class AuthException(DOException):
+    pass
 
 class InvalidResponse(DOException):
+    pass
 
-    def __init__(self, msg=None):
-        super(InvalidResponse, self).__init__(msg=msg)
+class DropletActionError(DOException):
+    pass
