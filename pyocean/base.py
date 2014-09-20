@@ -70,13 +70,13 @@ class Resource(ApiClient):
     def all(self):
         return getattr(pyocean, '%sIterator' % self.__classname)()
 
-    def create(self, attrs):
-        data = self.call_api(self.__resource, method='post', data=attrs)
+    def get(self, resource_id):
+        data = self.call_api('%s/%s' % (self.__resource, str(resource_id)))
         attr = data[self.__resource[:-1]]
         return getattr(pyocean, self.__classname)(attr)
 
-    def get(self, resource_id):
-        data = self.call_api('%s/%s' % (self.__resource, str(resource_id)))
+    def create(self, attrs):
+        data = self.call_api(self.__resource, method='post', data=attrs)
         attr = data[self.__resource[:-1]]
         return getattr(pyocean, self.__classname)(attr)
 
@@ -89,15 +89,15 @@ class Resource(ApiClient):
 
     def __str__(self):
         if self.__classname is 'Droplet':
-            return '<Droplet %s (%s)>' % (self.name, self.image['name'])
+            return "<Droplet '%s' (%s)>" % (self.name, self.image['name'])
         elif self.__classname is 'Size':
-            return '<Size %s>' % self.slug
+            return "<Size '%s'>" % self.slug
         elif self.__classname is 'Region':
-            return '<Region %s (%s)>' % (self.slug, self.name)
+            return "<Region '%s' (%s)>" % (self.slug, self.name)
         elif self.__classname is 'Action':
-            return '<Action %s (%s)>' % (self.id, self.status)
+            return "<Action %s (%s)>" % (self.id, self.status)
         else:
-            return '<Object>'
+            return '<%s>' % self.__classname
 
 
 class ResourceIterator(ApiClient):

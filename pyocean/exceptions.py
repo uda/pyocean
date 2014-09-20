@@ -8,8 +8,8 @@ class DOException(Exception):
 
 class AuthException(DOException):
 
-    def __init__(self, code=None, msg=None):
-        super(AuthException, self).__init__(code, msg)
+    def __init__(self, msg=None):
+        super(AuthException, self).__init__(msg=msg)
 
 
 class ClientError(DOException):
@@ -22,3 +22,9 @@ class ServerError(DOException):
 
     def __init__(self, code=None, msg=None):
         super(ServerError, self).__init__(code, msg)
+
+
+class InvalidResponse(DOException):
+
+    def __init__(self, msg=None):
+        super(InvalidResponse, self).__init__(msg=msg)
