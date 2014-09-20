@@ -35,8 +35,9 @@ class Droplet(Resource):
     def resize(self, size):
         pass
 
-    def restore(self, image):
-        pass
+    def restore_image(self, image):
+        """Rebuild an image using a backup image."""
+        return self.__do_action('restore', image=image)
 
     def rebuild(self, image):
         pass
@@ -59,11 +60,11 @@ class Droplet(Resource):
         """Enable private networking for current droplet."""
         return self.__do_action('enable_private_networking')
 
-    def snapshot(self, name):
+    def create_snapshot(self, name):
         """Snapshot current droplet."""
         return self.__do_action("snapshot", name=name)
 
-    def __do_action(self, type_, name=None):
+    def __do_action(self, type_, name=None, image=None):
         """Perform action on droplet."""
         if not self.id:
             raise ValueError('Droplet not loaded.')
@@ -71,6 +72,8 @@ class Droplet(Resource):
         params = {'type': type_}
         if name:
             params['name'] = name
+        if image:
+            params['image'] = image
         res = self.call_api(path, method='post', params=params)
         try:
             while res['action']['status'] == 'in-progress':
@@ -81,6 +84,8 @@ class Droplet(Resource):
                                              res['action']['type'])
         except KeyError:
             raise InvalidResponse('Retrieved invalid response from DigitalOcean API.')
+        else:
+            return res['action']
 
 
 class DropletIterator(ResourceIterator):

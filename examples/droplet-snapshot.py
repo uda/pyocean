@@ -17,10 +17,11 @@ try:
     # Create a snapshot
     image_name = 'snapshot_1'
     print("Creating snapshot '%s'. Please wait..." % image_name)
-    droplet.snapshot(image_name)
-    # Restore image. This will also power on the droplet.
-    print("Restoring snapshot '%s'. Please wait..." % image_name)
-    droplet.restore(image_name)
+    res = droplet.create_snapshot(image_name)
+    print(res)
+    # Restore image
+    #print("Restoring snapshot. Please wait...")
+    #droplet.restore_image(6204389)
     print('done.')
 except pyocean.exceptions.DOException as e:
     print(e)
