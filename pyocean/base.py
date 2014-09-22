@@ -1,9 +1,10 @@
-from .exceptions import *
-import pyocean
 import urlparse
 import re
 import os
 import sys
+import os.path
+import pyocean
+from .exceptions import *
 
 try:
     import requests
@@ -56,78 +57,67 @@ class Resource(ApiClient):
 
     def __init__(self, attrs):
         super(Resource, self).__init__()
-        self.__attrs = attrs if type(attrs) is dict else {}
-        self.__classname = self.__class__.__name__
-        self.__resource = '%ss' % self.__classname.lower()
+        self._attrs = attrs if type(attrs) is dict else {}
+        self._classname = self.__class__.__name__
+        self._resource = '%ss' % self._classname.lower()
 
     def __getattr__(self, name):
-        if name in self.__attrs:
-            return self.__attrs[name]
+        if name in self._attrs:
+            return self._attrs[name]
         else:
-            msg = "'%s' object has no attribute '%s'." % (self.__classname, name)
+            msg = "'%s' object has no attribute '%s'." % (self._classname, name)
             raise AttributeError(msg)
 
     def all(self):
-        return getattr(pyocean, '%sIterator' % self.__classname)()
+        return getattr(pyocean, '%sIterator' % self._classname)()
 
     def get(self, resource_id):
-        data = self.call_api('%s/%s' % (self.__resource, str(resource_id)))
-        attr = data[self.__resource[:-1]]
-        return getattr(pyocean, self.__classname)(attr)
+        data = self.call_api('%s/%s' % (self._resource, str(resource_id)))
+        attr = data[self._resource[:-1]]
+        return getattr(pyocean, self._classname)(attr)
 
     def create(self, attrs):
-        data = self.call_api(self.__resource, method='post', data=attrs)
-        attr = data[self.__resource[:-1]]
-        return getattr(pyocean, self.__classname)(attr)
+        data = self.call_api(self._resource, method='post', data=attrs)
+        attr = data[self._resource[:-1]]
+        return getattr(pyocean, self._classname)(attr)
 
     def destroy(self):
-        if self.__attrs.get('id'):
-            path = '%s/%s' % (self.__resource, self.__attrs['id'])
+        if self._attrs.get('id'):
+            path = '%s/%s' % (self._resource, self._attrs['id'])
             data = self.call_api(path, method='delete')
         else:
             raise ValueError('Droplet is not loaded.')
-
-    def __str__(self):
-        if self.__classname is 'Droplet':
-            return "<Droplet '%s' (%s)>" % (self.name, self.image['name'])
-        elif self.__classname is 'Size':
-            return "<Size '%s'>" % self.slug
-        elif self.__classname is 'Region':
-            return "<Region '%s' (%s)>" % (self.slug, self.name)
-        elif self.__classname is 'Action':
-            return "<Action %s (%s)>" % (self.id, self.status)
-        else:
-            return '<%s>' % self.__classname
 
 
 class ResourceIterator(ApiClient):
 
     def __init__(self):
         super(ResourceIterator, self).__init__()
-        self.__data = []
-        self.__page = 1
-        self.__has_more = True
-        self.__classname = self.__class__.__name__
-        self.__resource = '%ss' % re.sub('Iterator$', '', self.__classname).lower()
+        self._data = []
+        self._page = 1
+        self._has_more = True
+        self._classname = re.sub('Iterator$', '', self.__class__.__name__)
+        self._resource = '%ss' % self._classname.lower()
 
     def __iter__(self):
         return self
 
     def next(self):
-        if not self.__data and self.__has_more:
-            content = self.call_api(self.__resource, params={'page': self.__page})
+        if not self._data and self._has_more:
+            content = self.call_api(self._resource, params={'page': self._page})
             try:
-                self.__data = content[self.__resource]
+                key = os.path.basename(re.sub('/\d+', '', self._resource))
+                self._data = content[key]
             except KeyError:
-                self.__data = None
+                self._data = None
             try:
-                self.__has_more = bool(content['links']['pages']['next'])
+                self._has_more = bool(content['links']['pages']['next'])
             except KeyError:
-                self.__has_more = False
-            self.__page += 1
+                self._has_more = False
+            self._page += 1
 
-        if self.__data:
-            clas = getattr(pyocean, self.__resource[:-1].capitalize())
-            return clas(self.__data.pop(0))
+        if self._data:
+            c = getattr(pyocean, self._classname)
+            return c(self._data.pop(0))
         else:
             raise StopIteration

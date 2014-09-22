@@ -15,6 +15,9 @@ class Region(Resource):
     def destroy(self, *args, **kwargs):
         raise AttributeError("'Region' object has no attribute 'create'.")
 
+    def __str__(self):
+        return "<Region '%s' (%s)>" % (self.slug, self.name)
+
 
 class RegionIterator(ResourceIterator):
 

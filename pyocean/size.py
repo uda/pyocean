@@ -15,6 +15,9 @@ class Size(Resource):
     def destroy(self, *args, **kwargs):
         raise AttributeError("'Size' object has no attribute 'create'.")
 
+    def __str__(self):
+        return "<Size '%s'>" % self.slug
+
 
 class SizeIterator(ResourceIterator):
 

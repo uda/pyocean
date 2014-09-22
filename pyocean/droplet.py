@@ -1,4 +1,6 @@
 from .base import Resource, ResourceIterator
+from .image import ImageIterator
+from .action import ActionIterator
 from .exceptions import *
 import time
 
@@ -35,9 +37,9 @@ class Droplet(Resource):
     def resize(self, size):
         pass
 
-    def restore_image(self, image):
+    def restore_image(self, image_id):
         """Rebuild an image using a backup image."""
-        return self.__do_action('restore', image=image)
+        return self.__do_action('restore', image=int(image_id))
 
     def rebuild(self, image):
         pass
@@ -64,6 +66,22 @@ class Droplet(Resource):
         """Snapshot current droplet."""
         return self.__do_action("snapshot", name=name)
 
+    def get_snapshots(self):
+        """Get the snapshots that have been created for this droplet."""
+        return ImageIterator(self.id, 'snapshots')
+
+    def get_available_kernels(self):
+        """Get available kernels for this droplet."""
+        return ImageIterator(self.id, 'kernels')
+
+    def get_backups(self):
+        """Retrieve any backups associated with this droplet."""
+        return ImageIterator(self.id, 'backups')
+
+    def get_actions(self):
+        """Retrieve all actions that have been executed on this droplet."""
+        return ActionIterator(self.id)
+
     def __do_action(self, type_, name=None, image=None):
         """Perform action on droplet."""
         if not self.id:
@@ -86,6 +104,9 @@ class Droplet(Resource):
             raise InvalidResponse('Retrieved invalid response from DigitalOcean API.')
         else:
             return res['action']
+
+    def __str__(self):
+        return "<Droplet '%s' (%s)>" % (self.name, self.image['name'])
 
 
 class DropletIterator(ResourceIterator):
