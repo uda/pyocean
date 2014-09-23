@@ -58,6 +58,7 @@ class Resource(ApiClient):
     def __init__(self, attrs):
         super(Resource, self).__init__()
         self._attrs = attrs if type(attrs) is dict else {}
+        self._json_key = None
         self._classname = self.__class__.__name__
         self._resource = '%ss' % self._classname.lower()
 
@@ -73,13 +74,13 @@ class Resource(ApiClient):
 
     def get(self, resource_id):
         data = self.call_api('%s/%s' % (self._resource, str(resource_id)))
-        attr = data[self._resource[:-1]]
-        return getattr(pyocean, self._classname)(attr)
+        key = self._json_key or self._resource[:-1]
+        return getattr(pyocean, self._classname)(data[key])
 
     def create(self, attrs):
         data = self.call_api(self._resource, method='post', data=attrs)
-        attr = data[self._resource[:-1]]
-        return getattr(pyocean, self._classname)(attr)
+        key = self._json_key or self._resource[:-1]
+        return getattr(pyocean, self._classname)(data[key])
 
     def destroy(self):
         if self._attrs.get('id'):
@@ -96,6 +97,7 @@ class ResourceIterator(ApiClient):
         self._data = []
         self._page = 1
         self._has_more = True
+        self._json_key = None
         self._classname = re.sub('Iterator$', '', self.__class__.__name__)
         self._resource = '%ss' % self._classname.lower()
 
@@ -106,7 +108,7 @@ class ResourceIterator(ApiClient):
         if not self._data and self._has_more:
             content = self.call_api(self._resource, params={'page': self._page})
             try:
-                key = os.path.basename(re.sub('/\d+', '', self._resource))
+                key = self._json_key or os.path.basename(re.sub('/\d+', '', self._resource))
                 self._data = content[key]
             except KeyError:
                 self._data = None
