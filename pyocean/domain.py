@@ -9,6 +9,7 @@ class Domain(Resource):
         super(Domain, self).__init__(attrs)
 
     def records(self):
+        """Returns all records."""
         return DomainRecordIterator(self.name)
 
     def get_record(self, record_id):

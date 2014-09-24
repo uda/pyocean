@@ -5,8 +5,8 @@ class DomainRecord(Resource):
 
     def __init__(self, attrs, parent):
         super(DomainRecord, self).__init__(attrs, parent)
-        self._json_key = 'domain_records'
         self._resource = 'domains/%s/records' % parent
+        self._json_key = 'domain_records'
 
     def rename(self, name):
         path = '%s/%s' % (self._resource, self.id)
@@ -31,5 +31,5 @@ class DomainRecordIterator(ResourceIterator):
 
     def __init__(self, domain):
         super(DomainRecordIterator, self).__init__(domain)
-        self._json_key = 'domain_records'
         self._resource = 'domains/%s/records' % domain
+        self._json_key = 'domain_records'
