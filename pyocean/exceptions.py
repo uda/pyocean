@@ -21,3 +21,6 @@ class InvalidResponse(DOException):
 
 class DropletActionError(DOException):
     pass
+
+class ImageActionError(DOException):
+    pass
