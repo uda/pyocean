@@ -3,6 +3,7 @@ from .image import ImageIterator
 from .action import ActionIterator
 from .exceptions import *
 import time
+import re
 
 
 class Droplet(Resource):
@@ -35,20 +36,26 @@ class Droplet(Resource):
         return self.__do_action('password_reset')
 
     def resize(self, size):
-        pass
+        """Resize current droplet."""
+        return self.__do_action({'type': 'resize', 'size': size})
 
     def restore_image(self, image_id):
         """Rebuild an image using a backup image."""
-        return self.__do_action('restore', image=int(image_id))
+        return self.__do_action({'type': 'restore', 'image': int(image_id)})
 
     def rebuild(self, image):
-        pass
+        """Rebuild droplet using the specified image."""
+        if re.match('^\d+$', str(image).strip()):
+            image = int(image)
+        return self.__do_action({'type': 'rebuild', 'image': image})
 
     def rename(self, name):
-        pass
+        """Rename current droplet."""
+        return self.__do_action({'type': 'rename', 'name': name})
 
-    def change_kernel(self):
-        pass
+    def change_kernel(self, kernel_id):
+        """Change the kernel of current droplet."""
+        return self.__do_action({'type': 'change_kernel', 'kernel': kernel_id})
 
     def enable_ipv6(self):
         """Enable IPv6 for current droplet."""
@@ -64,7 +71,7 @@ class Droplet(Resource):
 
     def create_snapshot(self, name):
         """Snapshot current droplet."""
-        return self.__do_action("snapshot", name=name)
+        return self.__do_action({'type': 'snapshot', 'name': name})
 
     def get_snapshots(self):
         """Get the snapshots that have been created for this droplet."""
@@ -82,16 +89,13 @@ class Droplet(Resource):
         """Retrieve all actions that have been executed on this droplet."""
         return ActionIterator(self.id)
 
-    def __do_action(self, type_, name=None, image=None):
+    def __do_action(self, params={}):
         """Perform action on droplet."""
         if not self.id:
             raise ValueError('Droplet not loaded.')
+        if type(params) == str:
+            params = {'type': params}
         path = "droplets/%s/actions" % self.id
-        params = {'type': type_}
-        if name:
-            params['name'] = name
-        if image:
-            params['image'] = image
         res = self.call_api(path, method='post', params=params)
         try:
             while res['action']['status'] == 'in-progress':
