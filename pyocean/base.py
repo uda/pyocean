@@ -55,9 +55,10 @@ class ApiClient(object):
 
 class Resource(ApiClient):
 
-    def __init__(self, attrs):
+    def __init__(self, attrs, parent=None):
         super(Resource, self).__init__()
         self._attrs = attrs if type(attrs) is dict else {}
+        self._parent = parent
         self._json_key = None
         self._classname = self.__class__.__name__
         self._resource = '%ss' % self._classname.lower()
@@ -92,8 +93,9 @@ class Resource(ApiClient):
 
 class ResourceIterator(ApiClient):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(ResourceIterator, self).__init__()
+        self._parent = parent
         self._data = []
         self._page = 1
         self._has_more = True
@@ -119,7 +121,8 @@ class ResourceIterator(ApiClient):
             self._page += 1
 
         if self._data:
-            c = getattr(pyocean, self._classname)
-            return c(self._data.pop(0))
+            attrs = self._data.pop(0)
+            class_ = getattr(pyocean, self._classname)
+            return class_(attrs, self._parent) if self._parent else class_(attrs)
         else:
             raise StopIteration

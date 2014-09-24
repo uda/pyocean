@@ -8,10 +8,10 @@ class DOException(Exception):
 
 
 class ClientError(DOException):
-    """HTTP 4xx error"""
+    pass
 
 class ServerError(DOException):
-    """HTTP 5xx error"""
+    pass
 
 class AuthException(DOException):
     pass
