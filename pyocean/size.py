@@ -1,7 +1,11 @@
+# encoding: utf-8
+
 from .base import Resource, ResourceIterator
 
 
 class Size(Resource):
+    """This class represents a Size.
+    """
 
     def __init__(self, attrs={}):
         super(Size, self).__init__(attrs)
@@ -20,6 +24,8 @@ class Size(Resource):
 
 
 class SizeIterator(ResourceIterator):
+    """This class represents collection of the Size objects.
+    """
 
     def __init__(self):
         super(SizeIterator, self).__init__()
