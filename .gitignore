@@ -19,7 +19,8 @@
 *.rar
 *.tar
 *.zip
- 
+*.egg*
+
 # Logs and databases #
 ######################
 *.log
