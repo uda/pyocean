@@ -1,7 +1,11 @@
+# encoding: utf-8
+
 from .base import Resource, ResourceIterator
 
 
 class Key(Resource):
+    """This class represents the SSH key object.
+    """
 
     def __init__(self, attrs={}):
         super(Key, self).__init__(attrs)
@@ -22,6 +26,8 @@ class Key(Resource):
 
 
 class KeyIterator(ResourceIterator):
+    """This class represents collections of SSH keys.
+    """
 
     def __init__(self):
         super(KeyIterator, self).__init__()

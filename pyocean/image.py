@@ -1,15 +1,20 @@
+# encoding: utf-8
+
 from .base import Resource, ResourceIterator
 from .exceptions import InvalidResponse, ImageActionError
 import time
 
 
 class Image(Resource):
+    """This class represents an Image.
+    """
     
     def __init__(self, attrs={}):
         super(Image, self).__init__(attrs)
 
     def rename(self, name):
-        """Rename current image."""
+        """Rename current image.
+        """
         data = self.call_api(self._resource, method='post', data={'name': name})
         try:
             self._attrs = data['image']
@@ -18,7 +23,8 @@ class Image(Resource):
         return self
 
     def transfer_to(self, region_name):
-        """Transfer this image to the specified region."""
+        """Transfer this image to another region.
+        """
         data = {
             'type': 'transfer',
             'region': region_name
@@ -43,6 +49,8 @@ class Image(Resource):
 
 
 class ImageIterator(ResourceIterator):
+    """This class represents collection of Images.
+    """
 
     def __init__(self, droplet_id=None, image_type=None):
         super(ImageIterator, self).__init__()

@@ -1,7 +1,12 @@
+# encoding: utf-8
+
 from .base import Resource, ResourceIterator
 from .exceptions import InvalidResponse
 
+
 class DomainRecord(Resource):
+    """This class represent a Domain Record.
+    """
 
     def __init__(self, attrs, parent):
         super(DomainRecord, self).__init__(attrs, parent)
@@ -28,6 +33,8 @@ class DomainRecord(Resource):
 
 
 class DomainRecordIterator(ResourceIterator):
+    """This class is the container for the Domain Record objects.
+    """
 
     def __init__(self, domain):
         super(DomainRecordIterator, self).__init__(domain)

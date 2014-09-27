@@ -1,7 +1,11 @@
+# encoding: utf-8
+
 from .base import Resource, ResourceIterator
 
 
 class Region(Resource):
+    """This class represents a Region.
+    """
 
     def __init__(self, attrs={}):
         super(Region, self).__init__(attrs)
@@ -20,6 +24,8 @@ class Region(Resource):
 
 
 class RegionIterator(ResourceIterator):
+    """This class represents collection of the Region objects.
+    """
 
     def __init__(self):
         super(RegionIterator, self).__init__()
