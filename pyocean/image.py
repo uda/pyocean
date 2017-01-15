@@ -9,8 +9,8 @@ class Image(Resource):
     """This class represents an Image.
     """
     
-    def __init__(self, attrs={}):
-        super(Image, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Image, self).__init__(attrs, **kwargs)
 
     def rename(self, name):
         """Rename current image.
@@ -52,7 +52,7 @@ class ImageIterator(ResourceIterator):
     """This class represents collection of Images.
     """
 
-    def __init__(self, droplet_id=None, image_type=None):
-        super(ImageIterator, self).__init__()
+    def __init__(self, droplet_id=None, image_type=None, **kwargs):
+        super(ImageIterator, self).__init__(**kwargs)
         if droplet_id:
             self._resource = 'droplets/%s/%s' % (droplet_id, image_type)

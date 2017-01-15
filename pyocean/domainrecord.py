@@ -8,8 +8,8 @@ class DomainRecord(Resource):
     """This class represent a Domain Record.
     """
 
-    def __init__(self, attrs, parent):
-        super(DomainRecord, self).__init__(attrs, parent)
+    def __init__(self, attrs, parent, **kwargs):
+        super(DomainRecord, self).__init__(attrs, parent, **kwargs)
         self._resource = 'domains/%s/records' % parent
         self._json_key = 'domain_records'
 
@@ -36,7 +36,7 @@ class DomainRecordIterator(ResourceIterator):
     """This class is the container for the Domain Record objects.
     """
 
-    def __init__(self, domain):
-        super(DomainRecordIterator, self).__init__(domain)
+    def __init__(self, domain, **kwargs):
+        super(DomainRecordIterator, self).__init__(domain, **kwargs)
         self._resource = 'domains/%s/records' % domain
         self._json_key = 'domain_records'

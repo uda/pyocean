@@ -9,8 +9,8 @@ class Domain(Resource):
     """This class represents a Domain.
     """
 
-    def __init__(self, attrs={}):
-        super(Domain, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Domain, self).__init__(attrs, **kwargs)
 
     def records(self):
         """Returns all records.
@@ -43,5 +43,5 @@ class DomainIterator(ResourceIterator):
     """This class is the container for the Domain objects.
     """
 
-    def __init__(self):
-        super(DomainIterator, self).__init__()
+    def __init__(self, **kwargs):
+        super(DomainIterator, self).__init__(**kwargs)

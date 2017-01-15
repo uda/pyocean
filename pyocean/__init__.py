@@ -36,19 +36,19 @@ class DigitalOcean(object):
         """Convenient method to instantiate the classes.
         """
         if attr == 'domain':
-            return Domain()
+            return Domain(access_token=self.access_token)
         elif attr == 'droplet':
-            return Droplet()
+            return Droplet(access_token=self.access_token)
         elif attr == 'image':
-            return Image()
+            return Image(access_token=self.access_token)
         elif attr == 'action':
-            return Action()
+            return Action(access_token=self.access_token)
         elif attr == 'size':
-            return Size()
+            return Size(access_token=self.access_token)
         elif attr == 'region':
-            return Region()
+            return Region(access_token=self.access_token)
         elif attr == 'ssh_key':
-            return Key()
+            return Key(access_token=self.access_token)
         else:
             me = self.__class__.__name__
             raise AttributeError("'%s' object has no attribute '%s'" % (me, attr))

@@ -7,8 +7,8 @@ class Size(Resource):
     """This class represents a Size.
     """
 
-    def __init__(self, attrs={}):
-        super(Size, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Size, self).__init__(attrs, **kwargs)
 
     def get(self, *args, **kwargs):
         raise AttributeError("'Size' object has no attribute 'get'.")
@@ -27,6 +27,6 @@ class SizeIterator(ResourceIterator):
     """This class represents collection of the Size objects.
     """
 
-    def __init__(self):
-        super(SizeIterator, self).__init__()
+    def __init__(self, **kwargs):
+        super(SizeIterator, self).__init__(**kwargs)
 

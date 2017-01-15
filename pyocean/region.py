@@ -7,8 +7,8 @@ class Region(Resource):
     """This class represents a Region.
     """
 
-    def __init__(self, attrs={}):
-        super(Region, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Region, self).__init__(attrs, **kwargs)
 
     def get(self, *args, **kwargs):
         raise AttributeError("'Region' object has no attribute 'get'.")
@@ -27,6 +27,6 @@ class RegionIterator(ResourceIterator):
     """This class represents collection of the Region objects.
     """
 
-    def __init__(self):
-        super(RegionIterator, self).__init__()
+    def __init__(self, **kwargs):
+        super(RegionIterator, self).__init__(**kwargs)
 

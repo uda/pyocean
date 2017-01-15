@@ -22,8 +22,8 @@ class ApiClient(object):
 
     end_point = 'https://api.digitalocean.com/v2/'
 
-    def __init__(self):
-        self.access_token = os.getenv('PYOCEAN_ACCESS_TOKEN')
+    def __init__(self, access_token=None):
+        self.access_token = access_token or os.getenv('PYOCEAN_ACCESS_TOKEN')
 
     def call_api(self, path, method='get', params=None, data=None):
         """Call the DigitalOcean API.
@@ -73,7 +73,7 @@ class Resource(ApiClient):
     """This class represents a single resource in the API.
     """
 
-    def __init__(self, attrs, parent=None):
+    def __init__(self, attrs, parent=None, **kwargs):
         """Initialization.
 
         Keyword arguments:
@@ -82,7 +82,7 @@ class Resource(ApiClient):
         parent -- The ID of the parent object. For example, the Domain object
                   is the parent of DomainRecord object.
         """
-        super(Resource, self).__init__()
+        super(Resource, self).__init__(**kwargs)
         self._attrs = attrs if type(attrs) is dict else {}
         self._parent = parent
         self._json_key = None
@@ -131,8 +131,8 @@ class ResourceIterator(ApiClient):
     """This class represents a collection of resources from the API.
     """
 
-    def __init__(self, parent=None):
-        super(ResourceIterator, self).__init__()
+    def __init__(self, parent=None, **kwargs):
+        super(ResourceIterator, self).__init__(**kwargs)
         self._parent = parent
         self._data = []
         self._page = 1

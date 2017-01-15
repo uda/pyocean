@@ -11,8 +11,8 @@ class Action(Resource):
 
     """
 
-    def __init__(self, attrs={}):
-        super(Action, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Action, self).__init__(attrs, **kwargs)
 
     def create(self, *args, **kwargs):
         raise AttributeError("'Action' object has no attribute 'create'.")
@@ -28,7 +28,7 @@ class ActionIterator(ResourceIterator):
     """This class is the container for the Action objects.
     """
 
-    def __init__(self, droplet_id=None):
-        super(ActionIterator, self).__init__()
+    def __init__(self, droplet_id=None, **kwargs):
+        super(ActionIterator, self).__init__(**kwargs)
         if droplet_id:
             self._resource = 'droplets/%s/actions' % droplet_id

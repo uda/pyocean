@@ -12,8 +12,8 @@ class Droplet(Resource):
     """This class represents a Droplet.
     """
 
-    def __init__(self, attrs={}):
-        super(Droplet, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Droplet, self).__init__(attrs, **kwargs)
 
     def reboot(self):
         """Reboot current droplet.
@@ -139,5 +139,5 @@ class Droplet(Resource):
 
 class DropletIterator(ResourceIterator):
 
-    def __init__(self):
-        super(DropletIterator, self).__init__()
+    def __init__(self, **kwargs):
+        super(DropletIterator, self).__init__(**kwargs)

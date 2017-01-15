@@ -7,8 +7,8 @@ class Key(Resource):
     """This class represents the SSH key object.
     """
 
-    def __init__(self, attrs={}):
-        super(Key, self).__init__(attrs)
+    def __init__(self, attrs={}, **kwargs):
+        super(Key, self).__init__(attrs, **kwargs)
         self._resource = 'account/keys'
         self._json_key = 'ssh_key'
 
@@ -29,7 +29,7 @@ class KeyIterator(ResourceIterator):
     """This class represents collections of SSH keys.
     """
 
-    def __init__(self):
-        super(KeyIterator, self).__init__()
+    def __init__(self, **kwargs):
+        super(KeyIterator, self).__init__(**kwargs)
         self._resource = 'account/keys'
         self._json_key = 'ssh_keys'
